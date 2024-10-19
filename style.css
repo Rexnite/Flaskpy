@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+.janus-container {
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-family: 'Oswald', sans-serif;
+    color: cyan; /* JANUS text color */
+    background-color: rgba(173, 216, 230, 0.7); /* Lightest blue with a tinge of green */
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 60px; /* Larger font size */
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+}
+
+.datetime-container {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.clock, .date {
+    font-size: 36px; /* Bigger size for better visibility */
+    margin: 10px 0;
+    padding: 15px;
+    border: 3px solid rgba(173, 216, 230, 0.8);
+    border-radius: 10px;
+    background-color: white; /* Contrast background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    color: #333;
+    width: 300px; /* Add width to box */
+    display: inline-block;
+}
+
+.clock {
+    color: #00bfff; /* Clock specific color */
+}
+
+.date {
+    color: #ff4500; /* Date specific color */
+}
+
+.graph {
+    width: 40%; /* Graph size */
+    height: 300px; /* Fixed height for graphs */
+    margin: 10px auto; /* Auto margin for centering */
+    padding: 10px;
+    border: 1px solid #ccc; /* Border for graph */
+    background-color: white; /* Background for graph */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+}
+
+#graphs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

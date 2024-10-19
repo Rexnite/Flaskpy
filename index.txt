@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ground Control Station (GCS)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .status {
+            font-size: 14px;
+            color: green;
+        }
+        .error {
+            font-size: 14px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ground Control Station (GCS)</h1>
+
+        <!-- Send Data Section -->
+        <h2>Send Data to XBee</h2>
+        <form id="send-form">
+            <label for="data">Enter Data to Send:</label>
+            <input type="text" id="data" name="data" required placeholder="Type something...">
+            <button type="submit">Send</button>
+            <p id="send-status" class="status"></p>
+        </form>
+
+        <!-- Receive Data Section -->
+        <h2>Received Data from XBee</h2>
+        <button id="receive-btn">Receive Data</button>
+        <p id="received-data" class="status"></p>
+    </div>
+
+    <script>
+        document.getElementById('send-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const data = document.getElementById('data').value;
+
+            fetch('/send_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'data': data
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('send-status').textContent = data.status;
+            })
+            .catch(error => {
+                document.getElementById('send-status').textContent = 'Error: ' + error.message;
+                document.getElementById('send-status').classList.add('error');
+            });
+        });
+
+        document.getElementById('receive-btn').addEventListener('click', function () {
+            fetch('/receive_data')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('received-data').textContent = data.data;
+            })
+            .catch(error => {
+                document.getElementById('received-data').textContent = 'Error: ' + error.message;
+                document.getElementById('received-data').classList.add('error');
+            });
+        });
+    </script>
+</body>
+</html>

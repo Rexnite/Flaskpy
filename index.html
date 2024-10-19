@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ground Control Station (GCS)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="janus-container">
+        <h1>J.A.N.U.S</h1>
+    </div>
+    
+    <div class="datetime-container">
+        <div id="clock" class="clock"></div>
+        <div id="date" class="date"></div>
+    </div>
+
+    <div id="graphs">
+        <div id="altitude-graph" class="graph"></div>
+        <div id="tilt-x-graph" class="graph"></div>
+        <div id="tilt-y-graph" class="graph"></div>
+        <div id="rot-z-graph" class="graph"></div>
+    </div>
+
+    <script>
+        function updateGraphs() {
+            $.getJSON('/data', function(data) {
+                const timeData = data.altitude.map(point => point[0]);
+                const altitudeData = data.altitude.map(point => point[1]);
+                const tiltXData = data.tilt_x.map(point => point[1]);
+                const tiltYData = data.tilt_y.map(point => point[1]);
+                const rotZData = data.rot_z.map(point => point[1]);
+
+                // Update altitude graph
+                Plotly.newPlot('altitude-graph', [{x: timeData, y: altitudeData, type: 'scatter', name: 'Altitude'}], {
+                    title: 'Altitude over Time',
+                    height: 300,
+                    width: 400,
+                    margin: {t: 40, b: 40, l: 40, r: 40}
+                });
+                // Update tilt X graph
+                Plotly.newPlot('tilt-x-graph', [{x: timeData, y: tiltXData, type: 'scatter', name: 'Tilt X'}], {
+                    title: 'Tilt X over Time',
+                    height: 300,
+                    width: 400,
+                    margin: {t: 40, b: 40, l: 40, r: 40}
+                });
+                // Update tilt Y graph
+                Plotly.newPlot('tilt-y-graph', [{x: timeData, y: tiltYData, type: 'scatter', name: 'Tilt Y'}], {
+                    title: 'Tilt Y over Time',
+                    height: 300,
+                    width: 400,
+                    margin: {t: 40, b: 40, l: 40, r: 40}
+                });
+                // Update rotation Z graph
+                Plotly.newPlot('rot-z-graph', [{x: timeData, y: rotZData, type: 'scatter', name: 'Rot Z'}], {
+                    title: 'Rotation Z over Time',
+                    height: 300,
+                    width: 400,
+                    margin: {t: 40, b: 40, l: 40, r: 40}
+                });
+            });
+
+            $.getJSON('/current_time', function(data) {
+                $('#clock').text(data.time);
+                $('#date').text(data.date);
+            });
+        }
+
+        setInterval(updateGraphs, 1000);
+        updateGraphs();  // Initial call to set up the graphs
+    </script>
+</body>
+</html>
